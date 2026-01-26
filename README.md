@@ -2,7 +2,7 @@
 
 Memoria is a focused reading retention tool inspired by Readwise. It helps you master your reading highlights through daily reviews, spaced repetition, and a beautiful "Intellectual Minimalist" interface.
 
-## 🚀 Features
+## Features
 
 - **Daily Review System**: Immersive flashcard experience for reviewing highlights.
 - **Library Management**: Organize books and highlights with a visual grid layout.
@@ -10,7 +10,7 @@ Memoria is a focused reading retention tool inspired by Readwise. It helps you m
 - **Local Storage Persistence**: All data is saved locally to your browser, respecting user privacy.
 - **Responsive Design**: "Warm Paper" aesthetic that adapts to your device.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 This project is built with a modern frontend stack:
 
@@ -22,7 +22,7 @@ This project is built with a modern frontend stack:
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Animations**: [Framer Motion](https://www.framer.com/motion/) & `tailwindcss-animate`
 
-## 📦 Getting Started
+## Getting Started
 
 1. **Clone the repository**
    ```bash
@@ -44,7 +44,7 @@ This project is built with a modern frontend stack:
    npm run build
    ```
 
-## 🎨 Design Philosophy
+## Design Philosophy
 
 The interface follows an "Intellectual Minimalist" art direction:
 - **Typography**: `Lora` (Serif) for content paired with `Inter` (Sans) for UI.
