@@ -1,30 +1,31 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Book, Highlight, InsertBook, InsertHighlight } from "@shared/schema";
+import { apiUrl } from "@/lib/api-base";
 
 // API Functions
 async function fetchBooks(): Promise<Book[]> {
-  const res = await fetch("/api/books", { credentials: "include" });
+  const res = await fetch(apiUrl("/api/books"), { credentials: "include" });
   if (res.status === 401) throw new Error("401: Unauthorized");
   if (!res.ok) throw new Error("Failed to fetch books");
   return res.json();
 }
 
 async function fetchHighlights(): Promise<Highlight[]> {
-  const res = await fetch("/api/highlights", { credentials: "include" });
+  const res = await fetch(apiUrl("/api/highlights"), { credentials: "include" });
   if (res.status === 401) throw new Error("401: Unauthorized");
   if (!res.ok) throw new Error("Failed to fetch highlights");
   return res.json();
 }
 
 async function fetchDueHighlights(limit = 10): Promise<Highlight[]> {
-  const res = await fetch(`/api/review/due?limit=${limit}`, { credentials: "include" });
+  const res = await fetch(apiUrl(`/api/review/due?limit=${limit}`), { credentials: "include" });
   if (res.status === 401) throw new Error("401: Unauthorized");
   if (!res.ok) throw new Error("Failed to fetch due highlights");
   return res.json();
 }
 
 async function createBook(book: InsertBook): Promise<Book> {
-  const res = await fetch("/api/books", {
+  const res = await fetch(apiUrl("/api/books"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -36,7 +37,7 @@ async function createBook(book: InsertBook): Promise<Book> {
 }
 
 async function createHighlight(highlight: InsertHighlight): Promise<Highlight> {
-  const res = await fetch("/api/highlights", {
+  const res = await fetch(apiUrl("/api/highlights"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -48,7 +49,7 @@ async function createHighlight(highlight: InsertHighlight): Promise<Highlight> {
 }
 
 async function deleteHighlight(id: string): Promise<void> {
-  const res = await fetch(`/api/highlights/${id}`, {
+  const res = await fetch(apiUrl(`/api/highlights/${id}`), {
     method: "DELETE",
     credentials: "include",
   });
@@ -57,7 +58,7 @@ async function deleteHighlight(id: string): Promise<void> {
 }
 
 async function reviewHighlight(id: string, quality: number): Promise<Highlight> {
-  const res = await fetch(`/api/review/${id}`, {
+  const res = await fetch(apiUrl(`/api/review/${id}`), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",

@@ -44,6 +44,21 @@ This project is built with a modern frontend stack:
    npm run build
    ```
 
+## Deploy Frontend To GitHub Pages
+
+This repo now includes `.github/workflows/deploy-pages.yml` to publish the Vite client to GitHub Pages.
+
+1. In your GitHub repo, set a repository variable `VITE_API_BASE_URL` to your Replit backend URL (example: `https://your-app.replit.app`).
+2. In Replit backend env vars, set:
+   - `FRONTEND_URL=https://<your-user>.github.io/<repo>/`
+   - `CORS_ORIGIN=https://<your-user>.github.io`
+3. Push to `main` (or `master`) to trigger deployment.
+
+Local Pages build:
+```bash
+npm run build:pages
+```
+
 ## Design Philosophy
 
 The interface follows an "Intellectual Minimalist" art direction:

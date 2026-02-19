@@ -8,18 +8,47 @@ import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
 import { authStorage } from "./storage";
 
+export const LOCAL_USER_ID = "local-user";
+
+export function isAuthEnabled() {
+  const issuerUrl = process.env.OIDC_ISSUER_URL ?? process.env.ISSUER_URL;
+  const clientId = process.env.OIDC_CLIENT_ID ?? process.env.CLIENT_ID;
+  return Boolean(issuerUrl && clientId);
+}
+
+function attachLocalUser(req: any) {
+  req.user = {
+    claims: { sub: LOCAL_USER_ID },
+    expires_at: Number.MAX_SAFE_INTEGER,
+  };
+}
+
+function getOidcEnv() {
+  const issuerUrl = process.env.OIDC_ISSUER_URL ?? process.env.ISSUER_URL;
+  const clientId = process.env.OIDC_CLIENT_ID ?? process.env.CLIENT_ID;
+
+  if (!issuerUrl) {
+    throw new Error("Missing OIDC issuer URL (OIDC_ISSUER_URL).");
+  }
+
+  if (!clientId) {
+    throw new Error("Missing OIDC client ID (OIDC_CLIENT_ID).");
+  }
+
+  return { issuerUrl, clientId };
+}
+
 const getOidcConfig = memoize(
   async () => {
-    return await client.discovery(
-      new URL(process.env.ISSUER_URL ?? "https://replit.com/oidc"),
-      process.env.REPL_ID!
-    );
+    const { issuerUrl, clientId } = getOidcEnv();
+    return await client.discovery(new URL(issuerUrl), clientId);
   },
   { maxAge: 3600 * 1000 }
 );
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
+  const isCrossOrigin = Boolean(process.env.CORS_ORIGIN);
   const pgStore = connectPg(session);
   const sessionStore = new pgStore({
     conString: process.env.DATABASE_URL,
@@ -35,6 +64,7 @@ export function getSession() {
     cookie: {
       httpOnly: true,
       secure: true,
+      sameSite: isCrossOrigin ? "none" : "lax",
       maxAge: sessionTtl,
     },
   });
@@ -62,6 +92,12 @@ async function upsertUser(claims: any) {
 
 export async function setupAuth(app: Express) {
   app.set("trust proxy", 1);
+  const frontendUrl = process.env.FRONTEND_URL ?? "/";
+
+  if (!isAuthEnabled()) {
+    return;
+  }
+
   app.use(getSession());
   app.use(passport.initialize());
   app.use(passport.session());
@@ -83,7 +119,7 @@ export async function setupAuth(app: Express) {
 
   // Helper function to ensure strategy exists for a domain
   const ensureStrategy = (domain: string) => {
-    const strategyName = `replitauth:${domain}`;
+    const strategyName = `oidc:${domain}`;
     if (!registeredStrategies.has(strategyName)) {
       const strategy = new Strategy(
         {
@@ -104,7 +140,7 @@ export async function setupAuth(app: Express) {
 
   app.get("/api/login", (req, res, next) => {
     ensureStrategy(req.hostname);
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    passport.authenticate(`oidc:${req.hostname}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
@@ -112,18 +148,19 @@ export async function setupAuth(app: Express) {
 
   app.get("/api/callback", (req, res, next) => {
     ensureStrategy(req.hostname);
-    passport.authenticate(`replitauth:${req.hostname}`, {
-      successReturnToOrRedirect: "/",
+    passport.authenticate(`oidc:${req.hostname}`, {
+      successReturnToOrRedirect: frontendUrl,
       failureRedirect: "/api/login",
     })(req, res, next);
   });
 
   app.get("/api/logout", (req, res) => {
     req.logout(() => {
+      const { clientId } = getOidcEnv();
       res.redirect(
         client.buildEndSessionUrl(config, {
-          client_id: process.env.REPL_ID!,
-          post_logout_redirect_uri: `${req.protocol}://${req.hostname}`,
+          client_id: clientId,
+          post_logout_redirect_uri: frontendUrl,
         }).href
       );
     });
@@ -131,9 +168,18 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  if (!isAuthEnabled()) {
+    attachLocalUser(req as any);
+    return next();
+  }
+
+  if (typeof req.isAuthenticated !== "function") {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   const user = req.user as any;
 
-  if (!req.isAuthenticated() || !user.expires_at) {
+  if (!req.isAuthenticated() || !user?.expires_at) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 

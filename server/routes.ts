@@ -3,11 +3,18 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertBookSchema, insertHighlightSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import {
+  setupAuth,
+  registerAuthRoutes,
+  isAuthenticated,
+  authStorage,
+  LOCAL_USER_ID,
+  isAuthEnabled,
+} from "./integrations/auth";
 
 // Helper to get user ID from request
 function getUserId(req: any): string {
-  return req.user?.claims?.sub;
+  return req.user?.claims?.sub ?? LOCAL_USER_ID;
 }
 
 export async function registerRoutes(
@@ -18,6 +25,10 @@ export async function registerRoutes(
   // Setup authentication first
   await setupAuth(app);
   registerAuthRoutes(app);
+
+  if (!isAuthEnabled()) {
+    await authStorage.upsertUser({ id: LOCAL_USER_ID });
+  }
   
   // Books routes (protected)
   app.get("/api/books", isAuthenticated, async (req, res) => {

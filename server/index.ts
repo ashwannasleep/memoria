@@ -5,11 +5,27 @@ import { createServer } from "http";
 
 const app = express();
 const httpServer = createServer(app);
+const corsOrigin = process.env.CORS_ORIGIN;
 
 declare module "http" {
   interface IncomingMessage {
     rawBody: unknown;
   }
+}
+
+if (corsOrigin) {
+  app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", corsOrigin);
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(204);
+    }
+
+    next();
+  });
 }
 
 app.use(
@@ -85,10 +101,8 @@ app.use((req, res, next) => {
     await setupVite(httpServer, app);
   }
 
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
+  // Serve the app on the port specified in PORT, defaulting to 5000.
+  // This serves both the API and the client.
   const port = parseInt(process.env.PORT || "5000", 10);
   httpServer.listen(
     {

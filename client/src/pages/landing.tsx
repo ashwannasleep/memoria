@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { BookOpen, Brain, Lightbulb, Sparkles, ArrowRight } from "lucide-react";
 import heroImage from "@/assets/knowledge-hero.png";
+import { apiUrl } from "@/lib/api-base";
 
 export default function Landing() {
+  const loginUrl = apiUrl("/api/login");
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -12,7 +15,7 @@ export default function Landing() {
             <span className="w-6 h-6 bg-primary rounded-sm"></span>
             Memoria
           </div>
-          <a href="/api/login">
+          <a href={loginUrl}>
             <Button className="rounded-full" data-testid="button-login">
               Sign In
             </Button>
@@ -34,7 +37,7 @@ export default function Landing() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="/api/login">
+              <a href={loginUrl}>
                 <Button size="lg" className="rounded-full px-8 text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all" data-testid="button-get-started">
                   Get Started Free
                   <ArrowRight className="ml-2 w-4 h-4" />
@@ -122,7 +125,7 @@ export default function Landing() {
           <p className="text-lg text-muted-foreground">
             Join readers who never lose their best ideas.
           </p>
-          <a href="/api/login">
+          <a href={loginUrl}>
             <Button size="lg" className="rounded-full px-10 text-base font-medium shadow-lg">
               Start Your Free Account
               <ArrowRight className="ml-2 w-4 h-4" />
