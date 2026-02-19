@@ -29,13 +29,13 @@ export default function Dashboard() {
         
         {/* Welcome / Hero Section */}
         <div className="relative overflow-hidden rounded-xl bg-sidebar border border-border">
-          <div className="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12 relative z-10">
+          <div className="grid md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.25fr)] gap-6 md:gap-8 items-center p-6 md:p-10 lg:p-12 relative z-10">
             <div className="space-y-6">
               <div className="space-y-2">
                 <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground" data-testid="text-welcome-title">
                   Ready to remember?
                 </h2>
-                <p className="text-muted-foreground text-lg" data-testid="text-welcome-subtitle">
+                <p className="text-muted-foreground text-lg max-w-md" data-testid="text-welcome-subtitle">
                   {highlights.length > 0 
                     ? `You have ${Math.min(5, highlights.length)} highlights ready for your daily review.` 
                     : "Add your first book or highlight to start your knowledge journey."}
@@ -55,12 +55,14 @@ export default function Dashboard() {
                 )}
               </div>
             </div>
-            <div className="hidden md:block relative h-full min-h-[200px]">
-               <img 
-                 src={heroImage} 
-                 alt="Knowledge Abstract" 
-                 className="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-multiply dark:mix-blend-screen rounded-lg"
-               />
+            <div className="hidden md:block">
+              <div className="relative h-full min-h-[260px] lg:min-h-[300px] rounded-xl border border-border/60 bg-background/40 p-3">
+                <img
+                  src={heroImage}
+                  alt="Knowledge retention visualization"
+                  className="w-full h-full object-contain rounded-lg opacity-95"
+                />
+              </div>
             </div>
           </div>
           
