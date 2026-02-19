@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Memoria Open Graph Image</title>
+  <desc id="desc">Memoria knowledge retention dashboard banner.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf8ef" />
+      <stop offset="100%" stop-color="#ead8bb" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#c2410c" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <g opacity="0.25">
+    <circle cx="100" cy="100" r="120" fill="#ffffff" />
+    <circle cx="1120" cy="560" r="140" fill="#ffffff" />
+  </g>
+  <g fill="none" stroke="#b18d58" stroke-width="5" opacity="0.45">
+    <path d="M180 330 C340 240, 520 240, 680 330" />
+    <path d="M610 320 C760 260, 900 280, 1040 350" />
+  </g>
+  <g fill="#fffaf1" stroke="#e3d0ad" stroke-width="3">
+    <rect x="150" y="150" width="290" height="170" rx="20" />
+    <rect x="500" y="210" width="260" height="150" rx="20" />
+    <rect x="810" y="150" width="240" height="130" rx="20" />
+  </g>
+  <circle cx="750" cy="360" r="16" fill="url(#accent)" />
+  <circle cx="470" cy="300" r="12" fill="url(#accent)" />
+  <text x="150" y="470" fill="#2f2a22" font-family="Georgia, serif" font-size="78" font-weight="700">Memoria</text>
+  <text x="150" y="530" fill="#655742" font-family="Inter, Arial, sans-serif" font-size="34">Remember everything you read.</text>
+</svg>

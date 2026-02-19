@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, BookOpen, Flame, Trophy, TrendingUp } from "lucide-react";
 import { Link } from "wouter";
-import heroImage from "@/assets/knowledge-hero.png";
+import heroImage from "@/assets/knowledge-hero.svg";
 import { useBooks, useHighlights } from "@/lib/api";
 import { QuickAdd } from "@/components/quick-add";
 

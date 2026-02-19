@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Memoria favicon</title>
+  <defs>
+    <linearGradient id="paper" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff8eb" />
+      <stop offset="100%" stop-color="#f1e4cf" />
+    </linearGradient>
+    <linearGradient id="ink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#paper)" stroke="#d7c2a0" stroke-width="2" />
+  <rect x="16" y="14" width="20" height="36" rx="3" fill="#fffef9" stroke="#d9c8aa" />
+  <path d="M22 18 L22 44" stroke="#9a7a4d" stroke-width="2" stroke-linecap="round" />
+  <path d="M28 20 L31 20 M28 25 L31 25 M28 30 L31 30 M28 35 L31 35" stroke="#c8b08c" stroke-width="1.5" stroke-linecap="round" />
+  <circle cx="44" cy="34" r="9" fill="url(#ink)" />
+  <path d="M40 34 L43 37 L49 30" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

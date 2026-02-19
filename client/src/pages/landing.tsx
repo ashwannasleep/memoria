@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { BookOpen, Brain, Lightbulb, Sparkles, ArrowRight } from "lucide-react";
-import heroImage from "@/assets/knowledge-hero.png";
+import heroImage from "@/assets/knowledge-hero.svg";
 import { apiUrl } from "@/lib/api-base";
 
 export default function Landing() {
