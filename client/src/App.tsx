@@ -7,7 +7,6 @@ import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/dashboard";
 import DailyReview from "@/pages/daily-review";
 import Library from "@/pages/library";
-import ExtensionPreview from "@/pages/extension-preview";
 
 function AuthenticatedRouter() {
   return (
@@ -16,7 +15,6 @@ function AuthenticatedRouter() {
       <Route path="/review" component={DailyReview} />
       <Route path="/library" component={Library} />
       <Route path="/books" component={Library} />
-      <Route path="/extension" component={ExtensionPreview} />
       <Route component={NotFound} />
     </Switch>
   );

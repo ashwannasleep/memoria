@@ -2,8 +2,7 @@ import {
   BookOpen, 
   Brain, 
   LayoutDashboard, 
-  Library, 
-  AppWindow
+  Library
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
@@ -16,7 +15,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { icon: Brain, label: "Daily Review", href: "/review" },
     { icon: Library, label: "Library", href: "/library" },
     { icon: BookOpen, label: "Books", href: "/books" },
-    { icon: AppWindow, label: "Extension", href: "/extension" },
   ];
 
   return (
