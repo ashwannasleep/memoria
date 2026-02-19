@@ -135,7 +135,7 @@ export default function ExtensionPreview() {
         <p className="font-medium text-muted-foreground">Extension Preview Mode</p>
         <p className="text-sm text-muted-foreground/60 max-w-md">
           This preview demonstrates how the browser extension popup would function. 
-          Data saved here persists to your database.
+          Data saved here persists in your browser local storage.
         </p>
       </div>
     </div>
