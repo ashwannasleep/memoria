@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Memoria Web Clipper",
+  "description": "Save selected text from any webpage into Memoria local storage.",
+  "version": "1.0.0",
+  "permissions": ["contextMenus", "storage", "tabs"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Memoria Web Clipper",
+    "default_popup": "popup.html"
+  }
+}

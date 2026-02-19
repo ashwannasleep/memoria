@@ -6,7 +6,7 @@ Memoria is a focused reading retention tool inspired by Readwise. It helps you m
 
 - **Daily Review System**: Immersive flashcard experience for reviewing highlights.
 - **Library Management**: Organize books and highlights with a visual grid layout.
-- **Extension Simulation**: A preview mode demonstrating how a browser extension would integrate.
+- **Browser Web Clipper**: A real Chrome extension (Manifest V3) to save selected text from any page.
 - **Local Storage Persistence**: All data is saved locally to your browser, respecting user privacy.
 - **Responsive Design**: "Warm Paper" aesthetic that adapts to your device.
 
@@ -48,16 +48,30 @@ This project is built with a modern frontend stack:
 
 This repo now includes `.github/workflows/deploy-pages.yml` to publish the Vite client to GitHub Pages.
 
-1. In your GitHub repo, set a repository variable `VITE_API_BASE_URL` to your Replit backend URL (example: `https://your-app.replit.app`).
-2. In Replit backend env vars, set:
-   - `FRONTEND_URL=https://<your-user>.github.io/<repo>/`
-   - `CORS_ORIGIN=https://<your-user>.github.io`
-3. Push to `main` (or `master`) to trigger deployment.
+1. In GitHub, open your repository settings and enable Pages with source `GitHub Actions`.
+2. Push to `main` (or `master`) to trigger deployment.
 
 Local Pages build:
 ```bash
 npm run build:pages
 ```
+
+## Browser Extension (Web Clipper)
+
+The real extension lives in `extension/` and saves selected text into the same Memoria local data store (`memoria.local.v1`).
+
+Install in Chrome:
+1. Open `chrome://extensions`.
+2. Enable `Developer mode`.
+3. Click `Load unpacked`.
+4. Select the repo's `extension/` folder.
+5. Open the extension popup once and confirm the Memoria URL points to your site:
+   - Example: `https://ashwannasleep.github.io/memoria/`
+
+Usage:
+1. Select text on any webpage.
+2. Right click and choose `Save selection to Memoria`.
+3. Open Memoria and check the `Web Highlights` book.
 
 ## Design Philosophy
 

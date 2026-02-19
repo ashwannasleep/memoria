@@ -69,6 +69,12 @@ export default function ExtensionPreview() {
            </div>
         </div>
 
+        <div className="px-4 py-2 border-b border-border bg-primary/5">
+          <p className="text-xs text-muted-foreground">
+            Real extension now lives in the repository&apos;s <code>extension/</code> folder.
+          </p>
+        </div>
+
         {/* Extension Content */}
         <div className="flex-1 p-4 overflow-y-auto">
           <form onSubmit={handleSave} className="space-y-4">
@@ -132,10 +138,10 @@ export default function ExtensionPreview() {
       
       {/* Context Label */}
       <div className="fixed bottom-8 text-center space-y-2">
-        <p className="font-medium text-muted-foreground">Extension Preview Mode</p>
+        <p className="font-medium text-muted-foreground">Browser Extension Flow</p>
         <p className="text-sm text-muted-foreground/60 max-w-md">
-          This preview demonstrates how the browser extension popup would function. 
-          Data saved here persists in your browser local storage.
+          This page mirrors the clipper popup flow. The real Chrome extension can now save
+          selections directly to this app&apos;s local storage using <code>extension-bridge.html</code>.
         </p>
       </div>
     </div>

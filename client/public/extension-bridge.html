@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memoria Web Clipper Bridge</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #f8f6f2;
+        color: #1f2937;
+      }
+
+      main {
+        width: min(420px, calc(100% - 32px));
+        border: 1px solid #ded7ce;
+        border-radius: 12px;
+        background: #fffefb;
+        padding: 20px;
+        box-shadow: 0 12px 24px rgba(31, 41, 55, 0.08);
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 20px;
+      }
+
+      p {
+        margin: 0;
+        line-height: 1.45;
+      }
+
+      .status-ok {
+        color: #166534;
+      }
+
+      .status-error {
+        color: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Memoria Web Clipper</h1>
+      <p id="status">Saving highlight...</p>
+    </main>
+
+    <script>
+      (() => {
+        const STORAGE_KEY = "memoria.local.v1";
+        const LOCAL_USER_ID = "local-user";
+        const DEFAULT_COVER = "https://placehold.co/300x450/e2e8f0/1e293b?text=Book";
+        const statusEl = document.getElementById("status");
+
+        function setStatus(message, ok) {
+          statusEl.textContent = message;
+          statusEl.classList.remove("status-ok", "status-error");
+          statusEl.classList.add(ok ? "status-ok" : "status-error");
+        }
+
+        function createId() {
+          if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+            return crypto.randomUUID();
+          }
+          return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        }
+
+        function normalizeText(value, fallback) {
+          return typeof value === "string" && value.trim() ? value.trim() : fallback;
+        }
+
+        function parsePayload() {
+          const rawHash = window.location.hash.startsWith("#")
+            ? window.location.hash.slice(1)
+            : window.location.hash;
+          const params = new URLSearchParams(rawHash);
+          const rawPayload = params.get("payload");
+          if (!rawPayload) {
+            throw new Error("Missing clip payload.");
+          }
+
+          let parsed;
+          try {
+            parsed = JSON.parse(decodeURIComponent(rawPayload));
+          } catch {
+            throw new Error("Could not decode clip payload.");
+          }
+
+          if (!parsed || typeof parsed.text !== "string" || !parsed.text.trim()) {
+            throw new Error("Clip payload does not contain text.");
+          }
+
+          return parsed;
+        }
+
+        function loadData() {
+          try {
+            const raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+              return { books: [], highlights: [] };
+            }
+
+            const parsed = JSON.parse(raw);
+            const books = Array.isArray(parsed?.books)
+              ? parsed.books.filter((book) => typeof book === "object" && book !== null)
+              : [];
+            const highlights = Array.isArray(parsed?.highlights)
+              ? parsed.highlights.filter((highlight) => typeof highlight === "object" && highlight !== null)
+              : [];
+            return { books, highlights };
+          } catch {
+            return { books: [], highlights: [] };
+          }
+        }
+
+        function saveData(data) {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function findOrCreateBook(data, payload, now) {
+          const title = normalizeText(payload?.defaultBook?.title, "Web Highlights");
+          const author = normalizeText(payload?.defaultBook?.author, "Saved from the Web");
+          const category = normalizeText(payload?.defaultBook?.category, "Web");
+          const normalizedTitle = title.toLowerCase();
+
+          let book = data.books.find((candidate) => {
+            if (typeof candidate?.title !== "string") {
+              return false;
+            }
+            return candidate.title.trim().toLowerCase() === normalizedTitle;
+          });
+
+          if (!book) {
+            book = {
+              id: createId(),
+              userId: LOCAL_USER_ID,
+              title,
+              author,
+              cover: DEFAULT_COVER,
+              category,
+              lastRead: now,
+              createdAt: now,
+            };
+            data.books.push(book);
+            return book;
+          }
+
+          if (typeof book.id !== "string" || !book.id) {
+            book.id = createId();
+          }
+          book.userId = LOCAL_USER_ID;
+          book.title = normalizeText(book.title, title);
+          book.author = normalizeText(book.author, author);
+          book.cover = normalizeText(book.cover, DEFAULT_COVER);
+          book.category = normalizeText(book.category, category);
+          if (!book.createdAt) {
+            book.createdAt = now;
+          }
+          book.lastRead = now;
+
+          return book;
+        }
+
+        function buildNote(payload) {
+          const noteParts = [];
+          const rawNote = normalizeText(payload?.note, "");
+          const sourceUrl = normalizeText(payload?.sourceUrl, "");
+          if (rawNote) {
+            noteParts.push(rawNote);
+          }
+          if (sourceUrl) {
+            noteParts.push(`Source: ${sourceUrl}`);
+          }
+          return noteParts.length > 0 ? noteParts.join("\n\n") : null;
+        }
+
+        function saveHighlight(payload) {
+          const data = loadData();
+          const now = new Date().toISOString();
+          const book = findOrCreateBook(data, payload, now);
+
+          const highlight = {
+            id: createId(),
+            userId: LOCAL_USER_ID,
+            bookId: book.id,
+            text: payload.text.trim().slice(0, 5000),
+            note: buildNote(payload),
+            page: null,
+            easeFactor: 250,
+            interval: 0,
+            repetitions: 0,
+            nextReviewAt: now,
+            lastReviewedAt: null,
+            createdAt: now,
+          };
+
+          data.highlights.push(highlight);
+          saveData(data);
+        }
+
+        try {
+          const payload = parsePayload();
+          saveHighlight(payload);
+          setStatus("Saved to Memoria. You can close this tab.", true);
+          window.location.hash = "status=saved";
+        } catch (error) {
+          setStatus(error instanceof Error ? error.message : "Failed to save clip.", false);
+          window.location.hash = "status=error";
+        }
+      })();
+    </script>
+  </body>
+</html>
