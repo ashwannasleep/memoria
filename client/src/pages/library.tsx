@@ -21,22 +21,22 @@ export default function Library() {
 
   return (
     <Layout>
-      <div className="space-y-8 animate-in fade-in duration-500">
+      <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-serif font-bold" data-testid="text-library-title">Library</h1>
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold" data-testid="text-library-title">Library</h1>
             <p className="text-muted-foreground mt-1" data-testid="text-library-stats">
               {books.length} books, {highlights.length} highlights
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <QuickAdd />
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex gap-4 items-center bg-card p-2 rounded-lg border border-border shadow-sm">
-           <div className="relative flex-1">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center bg-card p-3 sm:p-2 rounded-lg border border-border shadow-sm">
+           <div className="relative flex-1 w-full">
              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
              <Input 
                placeholder="Search title, author, or highlights..." 
@@ -44,7 +44,7 @@ export default function Library() {
                data-testid="input-search"
              />
            </div>
-           <div className="flex items-center gap-2 border-l border-border pl-4">
+           <div className="flex items-center gap-2 sm:border-l border-border sm:pl-4 pt-2 sm:pt-0 border-t sm:border-t-0">
              <Button variant="ghost" size="sm" className="gap-2">
                <Filter className="w-4 h-4" /> Filter
              </Button>
@@ -90,11 +90,6 @@ export default function Library() {
               </div>
             );
           })}
-          
-          {/* Add New Placeholder */}
-          <div className="flex justify-center h-full items-center min-h-[300px]">
-             <QuickAdd />
-          </div>
         </div>
       </div>
     </Layout>

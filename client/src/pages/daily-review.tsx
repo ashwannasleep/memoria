@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useBooks, useDueHighlights, useReviewHighlight } from "@/lib/api";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Quote, Share2, ThumbsDown, ThumbsUp, Loader2 } from "lucide-react";
+import { Check, Quote, ThumbsDown, ThumbsUp, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
@@ -97,11 +97,11 @@ export default function DailyReview() {
           <p className="text-muted-foreground text-lg max-w-md">
             You've reviewed {reviewedCount} highlight{reviewedCount !== 1 ? 's' : ''} today. Great work keeping your mind sharp!
           </p>
-          <div className="flex gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3 pt-4">
              <Link href="/">
-              <Button variant="outline" size="lg" data-testid="button-back-dashboard">Back to Dashboard</Button>
+              <Button variant="outline" size="lg" className="w-full" data-testid="button-back-dashboard">Back to Dashboard</Button>
             </Link>
-            <Button size="lg" onClick={() => { refetch(); setCompleted(false); setCurrentIndex(0); setReviewedIds(new Set()); }} data-testid="button-review-more">
+            <Button size="lg" className="w-full" onClick={() => { refetch(); setCompleted(false); setCurrentIndex(0); setReviewedIds(new Set()); }} data-testid="button-review-more">
               Check for More
             </Button>
           </div>
@@ -122,7 +122,7 @@ export default function DailyReview() {
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto space-y-8">
+      <div className="max-w-2xl mx-auto space-y-6 md:space-y-8">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-serif font-semibold text-muted-foreground">Daily Review</h2>
           <span className="text-sm font-medium bg-secondary px-3 py-1 rounded-full" data-testid="text-review-progress">
@@ -142,11 +142,11 @@ export default function DailyReview() {
             >
               <Card className="border-none shadow-xl bg-card text-card-foreground overflow-hidden relative min-h-[400px] flex flex-col">
                 <div className="absolute top-0 left-0 w-1 h-full bg-primary/50"></div>
-                <CardContent className="flex-1 p-8 md:p-12 flex flex-col justify-center gap-8">
+                <CardContent className="flex-1 p-5 sm:p-6 md:p-12 flex flex-col justify-center gap-6 md:gap-8">
                   
-                  <div className="space-y-6">
+                  <div className="space-y-4 md:space-y-6">
                     <Quote className="w-8 h-8 text-primary/40 rotate-180" />
-                    <p className="text-2xl md:text-3xl font-serif leading-relaxed selection:bg-primary/30" data-testid="text-highlight-content">
+                    <p className="text-xl sm:text-2xl md:text-3xl font-serif leading-relaxed selection:bg-primary/30" data-testid="text-highlight-content">
                       {currentHighlight.text}
                     </p>
                     {currentHighlight.note && (
@@ -177,37 +177,27 @@ export default function DailyReview() {
         </div>
 
         {/* Action Bar - SM-2 quality ratings */}
-        <div className="flex items-center justify-center gap-4 md:gap-8 pt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 md:pt-4">
           <Button 
             variant="outline" 
-            size="icon" 
-            className="w-14 h-14 rounded-full border-2 hover:border-destructive hover:bg-destructive/10 hover:text-destructive transition-colors"
+            className="h-12 sm:h-14 border-2 hover:border-destructive hover:bg-destructive/10 hover:text-destructive transition-colors gap-2"
             onClick={() => handleReview(1)} // Failed - don't remember
             disabled={reviewMutation.isPending}
             data-testid="button-forgot"
           >
             <ThumbsDown className="w-6 h-6" />
+            Forgot
           </Button>
-
-          <div className="flex flex-col items-center text-xs text-muted-foreground">
-            <span>Forgot</span>
-          </div>
-
-          <div className="w-px h-8 bg-border"></div>
-
-          <div className="flex flex-col items-center text-xs text-muted-foreground">
-            <span>Remembered</span>
-          </div>
 
           <Button 
             variant="outline" 
-            size="icon" 
-            className="w-14 h-14 rounded-full border-2 hover:border-primary hover:bg-primary/10 transition-colors"
+            className="h-12 sm:h-14 border-2 hover:border-primary hover:bg-primary/10 transition-colors gap-2"
             onClick={() => handleReview(4)} // Good recall
             disabled={reviewMutation.isPending}
             data-testid="button-remembered"
           >
             <ThumbsUp className="w-6 h-6" />
+            Remembered
           </Button>
         </div>
         

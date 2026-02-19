@@ -25,17 +25,17 @@ export default function Dashboard() {
   
   return (
     <Layout>
-      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         {/* Welcome / Hero Section */}
         <div className="relative overflow-hidden rounded-xl bg-sidebar border border-border">
-          <div className="grid md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.25fr)] gap-6 md:gap-8 items-center p-6 md:p-10 lg:p-12 relative z-10">
+          <div className="grid md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.25fr)] gap-6 md:gap-8 items-center p-5 md:p-10 lg:p-12 relative z-10">
             <div className="space-y-6">
               <div className="space-y-2">
-                <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground" data-testid="text-welcome-title">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-foreground" data-testid="text-welcome-title">
                   Ready to remember?
                 </h2>
-                <p className="text-muted-foreground text-lg max-w-md" data-testid="text-welcome-subtitle">
+                <p className="text-muted-foreground text-base sm:text-lg max-w-md" data-testid="text-welcome-subtitle">
                   {highlights.length > 0 
                     ? `You have ${Math.min(5, highlights.length)} highlights ready for your daily review.` 
                     : "Add your first book or highlight to start your knowledge journey."}
@@ -45,7 +45,7 @@ export default function Dashboard() {
               <div className="flex gap-4">
                 {highlights.length > 0 ? (
                   <Link href="/review">
-                    <Button size="lg" className="rounded-full px-8 font-medium text-base shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all" data-testid="button-start-review">
+                    <Button size="lg" className="w-full sm:w-auto rounded-full px-8 font-medium text-base shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all" data-testid="button-start-review">
                       Start Daily Review
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </Button>
@@ -70,7 +70,7 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           <Card className="bg-card/50 backdrop-blur-sm border-border/60 shadow-sm hover:shadow-md transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Day Streak</CardTitle>
@@ -114,9 +114,9 @@ export default function Dashboard() {
 
         {/* Recent Books Section */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h3 className="text-xl font-serif font-bold">Your Library</h3>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <QuickAdd />
               <Link href="/books">
                 <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground" data-testid="button-view-all">

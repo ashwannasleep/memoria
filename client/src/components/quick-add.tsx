@@ -82,7 +82,7 @@ export function QuickAdd() {
           Quick Add
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-serif">
             {mode === 'highlight' ? 'Add Highlight' : 'Add New Book'}
@@ -93,7 +93,7 @@ export function QuickAdd() {
           <form onSubmit={handleAddHighlight} className="space-y-4 pt-4">
             <div className="space-y-2">
               <Label>Book</Label>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Select value={selectedBookId} onValueChange={setSelectedBookId}>
                   <SelectTrigger className="flex-1" data-testid="select-book">
                     <SelectValue placeholder="Select a book..." />
@@ -107,7 +107,7 @@ export function QuickAdd() {
                     )}
                   </SelectContent>
                 </Select>
-                <Button type="button" variant="outline" onClick={() => setMode('book')} data-testid="button-new-book">
+                <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={() => setMode('book')} data-testid="button-new-book">
                   New Book
                 </Button>
               </div>
@@ -136,7 +136,7 @@ export function QuickAdd() {
             </div>
 
             <div className="flex justify-end pt-2">
-              <Button type="submit" disabled={createHighlight.isPending} data-testid="button-save-highlight">
+              <Button type="submit" className="w-full sm:w-auto" disabled={createHighlight.isPending} data-testid="button-save-highlight">
                 {createHighlight.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Save Highlight
               </Button>
@@ -166,11 +166,11 @@ export function QuickAdd() {
               />
             </div>
 
-            <div className="flex justify-between pt-2">
-              <Button type="button" variant="ghost" onClick={() => setMode('highlight')}>
+            <div className="flex flex-col-reverse sm:flex-row justify-between gap-2 pt-2">
+              <Button type="button" variant="ghost" className="w-full sm:w-auto" onClick={() => setMode('highlight')}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={createBook.isPending} data-testid="button-save-book">
+              <Button type="submit" className="w-full sm:w-auto" disabled={createBook.isPending} data-testid="button-save-book">
                 {createBook.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Add Book
               </Button>
